@@ -14,7 +14,7 @@ async function handleRequest(request) {
 
   if (request.method !== 'GET') return methodNotAllowed(request);
 
-  const base = 'http://google.com';
+  const base = 'http://leech-54x0b.kinsta.app';
   const url = new URL(request.url);
   const { pathname, search } = url;
   const destinationURL = `${base}${pathname}${search}`;

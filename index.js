@@ -5,7 +5,6 @@ const server = http.createServer((req, res) => {
   res.end('Hello, World!');
 });
 
-const PORT = 8080; // Setting the server to run on port 8080
-server.listen(PORT, () => {
-  console.log(`Server is running at http://localhost:${PORT}/`);
+server.listen(80, '127.0.0.1', () => {
+  console.log('Server is running at http://127.0.0.1/');
 });

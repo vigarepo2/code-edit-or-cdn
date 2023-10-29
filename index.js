@@ -45,7 +45,7 @@ async function handleRequest(request) {
 }
 
 async function sendMessage(chatId, text) {
-  const telegramBotToken = '6149643691:AAHKuAEL5BLub8NGDi77ngjy6nqvI-SkmGg'; // Replace with your actual Telegram bot token
+  const telegramBotToken = '6911293155:AAFyrdkPGzFUi2qVa8tJdyEW-PUoCa1O-M8'; // Replace with your actual Telegram bot token
   const apiUrl = `https://api.telegram.org/bot${telegramBotToken}/sendMessage`;
 
   const params = {

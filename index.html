@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Telegram Bot Functions</title>
+</head>
+<body>
+    <script>
+        async function sendMessage(chatId, text) {
+            const telegramBotToken = '6149643691:AAHKuAEL5BLub8NGDi77ngjy6nqvI-SkmGg'; // Replace with your actual Telegram bot token
+            const apiUrl = `https://api.telegram.org/bot${telegramBotToken}/sendMessage`;
+
+            const params = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: text,
+                    parse_mode: 'HTML', // To enable HTML formatting
+                }),
+            };
+
+            // Simulated fetch request... replace with your actual logic
+            console.log("Simulated fetch to:", apiUrl, "with params:", params);
+        }
+
+        async function handleRequest(request) {
+            // Simulated JSON data for demonstration
+            const json = {
+                message: {
+                    chat: { id: 123 },
+                    text: "/start",
+                    from: { id: 456 }
+                    // Add other necessary message details here for simulation
+                }
+            };
+
+            const { method, body } = request;
+            const chatId = json.message.chat.id;
+            const messageText = json.message.text;
+
+            if (method === 'POST') {
+                if (json.message.forward_from_chat) {
+                    // Handle forwarded messages (simulation)
+                    // Simulated logic... replace with your actual logic
+                    const forwardedChatId = json.message.forward_from_chat.id;
+                    const responseText = `Your User ID is: ${json.message.from.id}\nForwarded from: ${forwardedChatId}`;
+                    await sendMessage(chatId, responseText);
+                } else if (json.message.reply_to_message) {
+                    // Handle replies to forwarded messages (simulation)
+                    // Simulated logic... replace with your actual logic
+                    const repliedMessage = json.message.reply_to_message;
+                    if (repliedMessage.forward_from_chat) {
+                        const repliedChatId = repliedMessage.forward_from_chat.id;
+                        const responseText = `Your User ID is: ${json.message.from.id}\nReplied to a message from: ${repliedChatId}`;
+                        await sendMessage(chatId, responseText);
+                    }
+                } else if (messageText === '/start') {
+                    // Handle the /start command (simulation)
+                    // Simulated logic... replace with your actual logic
+                    const responseText = `Welcome to your Telegram bot!\nYour User ID is: ${json.message.from.id}\nBot By: @DokuBots`;
+                    await sendMessage(chatId, responseText);
+                } else if (messageText === '/id') {
+                    // Handle the /id command (simulation)
+                    // Simulated logic... replace with your actual logic
+                    if (chatId !== json.message.from.id) {
+                        const responseText = `Your User ID is: ${json.message.from.id}\nGroup ID is: ${chatId}`;
+                        await sendMessage(chatId, responseText);
+                    } else {
+                        const responseText = `Your User ID is: ${json.message.from.id}`;
+                        await sendMessage(chatId, responseText);
+                    }
+                }
+            }
+        }
+
+        // Simulated fetch event trigger
+        const event = {
+            request: {
+                // Simulated request object
+                // Add necessary properties for demonstration
+                method: 'POST',
+                // Add other properties based on your scenario
+            }
+        };
+
+        // Simulated 'fetch' event trigger
+        handleRequest(event.request)
+            .then(() => console.log("Request handled successfully"))
+            .catch(err => console.error("Error handling request:", err));
+    </script>
+</body>
+</html>

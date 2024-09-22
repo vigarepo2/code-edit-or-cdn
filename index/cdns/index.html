@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Telegram Bot Operations</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Font Awesome for Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <style>
+    body {
+      background-color: #f4f5f7;
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      padding: 60px 15px;
+    }
+    .card {
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      background-color: #ffffff;
+    }
+    .card-header {
+      background-color: #ffffff;
+      border-bottom: none;
+      text-align: center;
+      padding-top: 30px;
+    }
+    .card-title {
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: #333333;
+    }
+    .form-label {
+      font-weight: 600;
+      color: #555555;
+    }
+    .form-control, .form-select {
+      border-radius: 8px;
+    }
+    .btn-primary {
+      background-color: #0069d9;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 20px;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+    }
+    .btn-primary:hover {
+      background-color: #0053ba;
+    }
+    .btn-secondary {
+      background-color: #6c757d;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 20px;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+    }
+    .btn-secondary:hover {
+      background-color: #5a6268;
+    }
+    .result-card {
+      background-color: #f8f9fa;
+      border: none;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 30px;
+    }
+    .result-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+    .result-content p {
+      margin-bottom: 8px;
+      color: #333333;
+    }
+    .footer {
+      text-align: center;
+      padding: 20px;
+      color: #888888;
+      font-size: 0.9rem;
+    }
+    @media (max-width: 767.98px) {
+      .container {
+        padding: 30px 15px;
+      }
+      .card-title {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="card mx-auto" style="max-width: 600px;">
+      <div class="card-header">
+        <h2 class="card-title">
+          <i class="fab fa-telegram-plane text-primary"></i> Telegram Bot Operations
+        </h2>
+      </div>
+      <div class="card-body">
+        <form id="botForm">
+          <div class="mb-4">
+            <label for="botToken" class="form-label">Bot Token <i class="fas fa-key"></i></label>
+            <input type="text" class="form-control" id="botToken" placeholder="Enter your bot token" required>
+          </div>
+
+          <div class="mb-4">
+            <label for="operationSelect" class="form-label">Select Operation <i class="fas fa-cogs"></i></label>
+            <select class="form-select" id="operationSelect" required>
+              <option value="" selected>-- Select an operation --</option>
+              <option value="getMe">Get Bot Details</option>
+              <option value="getChat">Get Chat Details</option>
+              <option value="exportChatInviteLink">Export Chat Invite Link</option>
+            </select>
+          </div>
+
+          <div id="additionalFields"></div>
+
+          <div class="d-grid gap-2 mt-4">
+            <button type="button" class="btn btn-primary" id="executeButton" onclick="executeOperation()" style="display:none;">
+              <i class="fas fa-play"></i> Execute
+            </button>
+          </div>
+        </form>
+
+        <div id="result"></div>
+
+        <div class="d-grid gap-2 mt-3">
+          <button type="button" class="btn btn-secondary" id="copyButton" style="display:none;" onclick="copyToClipboard()">
+            <i class="fas fa-copy"></i> Copy to Clipboard
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    &copy; 2023 Telegram Bot Operations. All rights reserved.
+  </div>
+
+  <!-- Bootstrap 5 JS and Dependencies -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Custom JavaScript -->
+  <script>
+    function showOperationFields() {
+      const operation = document.getElementById('operationSelect').value;
+      const additionalFields = document.getElementById('additionalFields');
+      const executeButton = document.getElementById('executeButton');
+      const result = document.getElementById('result');
+      const copyButton = document.getElementById('copyButton');
+
+      additionalFields.innerHTML = '';
+      result.innerHTML = '';
+      copyButton.style.display = 'none';
+
+      if (operation === 'getChat' || operation === 'exportChatInviteLink') {
+        additionalFields.innerHTML = `
+          <div class="mb-4">
+            <label for="chatId" class="form-label">Chat ID <i class="fas fa-hashtag"></i></label>
+            <input type="text" class="form-control" id="chatId" placeholder="Enter chat ID" required>
+          </div>`;
+      }
+
+      executeButton.style.display = operation ? 'block' : 'none';
+    }
+
+    document.getElementById('operationSelect').addEventListener('change', showOperationFields);
+
+    function executeOperation() {
+      const operation = document.getElementById('operationSelect').value;
+      if (operation === 'getMe') {
+        getBotDetails();
+      } else if (operation === 'getChat') {
+        getChatDetails();
+      } else if (operation === 'exportChatInviteLink') {
+        exportInviteLink();
+      }
+    }
+
+    function getBotDetails() {
+      const botToken = document.getElementById('botToken').value.trim();
+      if (!botToken) {
+        alert('Please enter the bot token.');
+        return;
+      }
+
+      fetch(`https://api.telegram.org/bot${botToken}/getMe`)
+        .then(response => response.json())
+        .then(data => {
+          const result = document.getElementById('result');
+          const copyButton = document.getElementById('copyButton');
+          if (data.ok) {
+            const botDetails = `
+              <div class="result-card">
+                <h3 class="result-title"><i class="fas fa-robot text-primary"></i> Bot Details</h3>
+                <div class="result-content">
+                  <p><strong>ID:</strong> ${data.result.id}</p>
+                  <p><strong>Name:</strong> ${data.result.first_name}</p>
+                  <p><strong>Username:</strong> @${data.result.username}</p>
+                </div>
+              </div>`;
+            result.innerHTML = botDetails;
+            copyButton.style.display = 'block';
+            copyButton.setAttribute('data-link', `@${data.result.username}`);
+          } else {
+            result.innerHTML = `<div class="alert alert-danger mt-4"><strong>Error:</strong> ${data.description}</div>`;
+            copyButton.style.display = 'none';
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('An error occurred while fetching bot details.');
+        });
+    }
+
+    function getChatDetails() {
+      const botToken = document.getElementById('botToken').value.trim();
+      const chatId = document.getElementById('chatId').value.trim();
+      if (!chatId) {
+        alert('Please enter the chat ID.');
+        return;
+      }
+
+      fetch(`https://api.telegram.org/bot${botToken}/getChat?chat_id=${chatId}`)
+        .then(response => response.json())
+        .then(data => {
+          const result = document.getElementById('result');
+          const copyButton = document.getElementById('copyButton');
+          if (data.ok) {
+            const chatTitle = data.result.title || 'N/A';
+            const inviteLink = data.result.invite_link || 'N/A';
+            const inviteLinkHTML = inviteLink !== 'N/A' ? `<a href="${inviteLink}" target="_blank">${inviteLink}</a>` : inviteLink;
+
+            const chatDetails = `
+              <div class="result-card">
+                <h3 class="result-title"><i class="fas fa-comments text-primary"></i> Chat Details</h3>
+                <div class="result-content">
+                  <p><strong>Title:</strong> ${chatTitle}</p>
+                  <p><strong>Invite Link:</strong> ${inviteLinkHTML}</p>
+                </div>
+              </div>`;
+            result.innerHTML = chatDetails;
+            if (inviteLink !== 'N/A') {
+              copyButton.style.display = 'block';
+              copyButton.setAttribute('data-link', inviteLink);
+            } else {
+              copyButton.style.display = 'none';
+            }
+          } else {
+            result.innerHTML = `<div class="alert alert-danger mt-4"><strong>Error:</strong> ${data.description}</div>`;
+            copyButton.style.display = 'none';
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('An error occurred while fetching chat details.');
+        });
+    }
+
+    function exportInviteLink() {
+      const botToken = document.getElementById('botToken').value.trim();
+      const chatId = document.getElementById('chatId').value.trim();
+      if (!chatId) {
+        alert('Please enter the chat ID.');
+        return;
+      }
+
+      fetch(`https://api.telegram.org/bot${botToken}/exportChatInviteLink`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId })
+      })
+      .then(response => response.json())
+      .then(data => {
+        const result = document.getElementById('result');
+        const copyButton = document.getElementById('copyButton');
+        if (data.ok) {
+          const inviteLink = data.result;
+          const inviteLinkHTML = `<a href="${inviteLink}" target="_blank">${inviteLink}</a>`;
+          result.innerHTML = `
+            <div class="result-card">
+              <h3 class="result-title"><i class="fas fa-link text-primary"></i> Exported Invite Link</h3>
+              <div class="result-content">
+                <p><strong>Link:</strong> ${inviteLinkHTML}</p>
+              </div>
+            </div>`;
+          copyButton.style.display = 'block';
+          copyButton.setAttribute('data-link', inviteLink);
+        } else {
+          result.innerHTML = `<div class="alert alert-danger mt-4"><strong>Error:</strong> ${data.description}</div>`;
+          copyButton.style.display = 'none';
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while exporting the invite link.');
+      });
+    }
+
+    function copyToClipboard() {
+      const dataLink = document.getElementById('copyButton').getAttribute('data-link');
+      if (!dataLink) return;
+
+      navigator.clipboard.writeText(dataLink)
+        .then(() => {
+          alert('Copied to clipboard!');
+        })
+        .catch(err => {
+          console.error('Failed to copy:', err);
+          alert('Failed to copy to clipboard.');
+        });
+    }
+  </script>
+
+</body>
+</html>

@@ -1,8 +1,17 @@
 document.getElementById('generateBtn').addEventListener('click', generateCardNumbers);
+document.getElementById('quantitySelect').addEventListener('change', toggleCustomQuantityInput);
 
 function generateCardNumbers() {
     const bin = document.getElementById('binInput').value.trim();
-    const quantity = parseInt(document.getElementById('quantitySelect').value);
+    const quantitySelect = document.getElementById('quantitySelect').value;
+    let quantity = quantitySelect === 'custom' ? parseInt(document.getElementById('customQuantityInput').value) : parseInt(quantitySelect);
+
+    // If the user selected "custom" but didn't enter a valid quantity, show an alert
+    if (quantitySelect === 'custom' && (isNaN(quantity) || quantity <= 0)) {
+        alert('Please enter a valid custom quantity.');
+        return;
+    }
+
     let cardNumbers = [];
 
     for (let i = 0; i < quantity; i++) {
@@ -17,8 +26,21 @@ function generateCardNumbers() {
     displayCardNumbers(cardNumbers);
 }
 
+function toggleCustomQuantityInput() {
+    const quantitySelect = document.getElementById('quantitySelect').value;
+    const customQuantityContainer = document.getElementById('customQuantityContainer');
+    
+    // If the user selects "custom", show the custom quantity input field, otherwise hide it
+    if (quantitySelect === 'custom') {
+        customQuantityContainer.style.display = 'block';
+    } else {
+        customQuantityContainer.style.display = 'none';
+    }
+}
+
 function generateCardNumber(bin) {
     let number = '';
+    
     // Replace 'x' or 'X' with random digits and construct the card number
     for (let i = 0; i < bin.length; i++) {
         if (bin[i].toLowerCase() === 'x') {

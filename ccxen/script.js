@@ -18,11 +18,22 @@ function generateCardNumbers() {
 }
 
 function generateCardNumber(bin) {
-    let number = bin;
+    let number = '';
+    // Replace 'x' or 'X' with random digits and construct the card number
+    for (let i = 0; i < bin.length; i++) {
+        if (bin[i].toLowerCase() === 'x') {
+            number += Math.floor(Math.random() * 10); // Replace 'x' or 'X' with a random digit
+        } else {
+            number += bin[i]; // Keep non-'x' characters as they are
+        }
+    }
+
+    // Add random digits until card number is of correct length
     while (number.length < (getCardLength(bin) - 1)) {
         number += Math.floor(Math.random() * 10);
     }
-    number += getCheckDigit(number);
+
+    number += getCheckDigit(number); // Add check digit
     return number;
 }
 

@@ -6,7 +6,6 @@ function generateCardNumbers() {
     const quantitySelect = document.getElementById('quantitySelect').value;
     let quantity = quantitySelect === 'custom' ? parseInt(document.getElementById('customQuantityInput').value) : parseInt(quantitySelect);
 
-    // If the user selected "custom" but didn't enter a valid quantity, show an alert
     if (quantitySelect === 'custom' && (isNaN(quantity) || quantity <= 0)) {
         alert('Please enter a valid custom quantity.');
         return;
@@ -29,8 +28,6 @@ function generateCardNumbers() {
 function toggleCustomQuantityInput() {
     const quantitySelect = document.getElementById('quantitySelect').value;
     const customQuantityContainer = document.getElementById('customQuantityContainer');
-    
-    // If the user selects "custom", show the custom quantity input field, otherwise hide it
     if (quantitySelect === 'custom') {
         customQuantityContainer.style.display = 'block';
     } else {
@@ -40,22 +37,19 @@ function toggleCustomQuantityInput() {
 
 function generateCardNumber(bin) {
     let number = '';
-    
-    // Replace 'x' or 'X' with random digits and construct the card number
     for (let i = 0; i < bin.length; i++) {
         if (bin[i].toLowerCase() === 'x') {
-            number += Math.floor(Math.random() * 10); // Replace 'x' or 'X' with a random digit
+            number += Math.floor(Math.random() * 10);
         } else {
-            number += bin[i]; // Keep non-'x' characters as they are
+            number += bin[i];
         }
     }
 
-    // Add random digits until card number is of correct length
     while (number.length < (getCardLength(bin) - 1)) {
         number += Math.floor(Math.random() * 10);
     }
 
-    number += getCheckDigit(number); // Add check digit
+    number += getCheckDigit(number);
     return number;
 }
 
@@ -105,12 +99,14 @@ function getCheckDigit(num) {
 function displayCardNumbers(numbers) {
     const resultCard = document.getElementById('resultCard');
     const cardNumbers = document.getElementById('cardNumbers');
+
+    // Join the array of card numbers with a line break for proper formatting
     cardNumbers.innerHTML = numbers.join('<br>');
     resultCard.style.display = 'block';
 }
 
 function copyToClipboard() {
-    const text = document.getElementById('cardNumbers').textContent;
+    const text = document.getElementById('cardNumbers').innerText;
     navigator.clipboard.writeText(text).then(() => {
         alert('Card numbers copied to clipboard!');
     }).catch(err => {

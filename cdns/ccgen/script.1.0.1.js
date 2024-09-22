@@ -54,12 +54,19 @@ function generateCardNumber(bin) {
 }
 
 function getCardLength(bin) {
+    // Handling various card lengths
     if (bin.startsWith("34") || bin.startsWith("37")) {
         return 15; // American Express
     } else if (bin.startsWith("4")) {
         return 16; // Visa
     } else if (bin.startsWith("5") || bin.startsWith("2")) {
         return 16; // MasterCard
+    } else if (bin.startsWith("35")) {
+        return 16; // JCB
+    } else if (bin.startsWith("36") || bin.startsWith("38") || bin.startsWith("30")) {
+        return 14; // Diners Club
+    } else if (bin.startsWith("6011") || bin.startsWith("65")) {
+        return 16; // Discover
     }
     return 16; // Default length
 }
@@ -67,6 +74,8 @@ function getCardLength(bin) {
 function generateCVV(bin) {
     if (bin.startsWith("34") || bin.startsWith("37")) {
         return Math.floor(1000 + Math.random() * 9000).toString().substring(0, 4); // American Express, 4 digits
+    } else if (bin.startsWith("36") || bin.startsWith("38") || bin.startsWith("30")) {
+        return Math.floor(100 + Math.random() * 900).toString().substring(0, 3); // Diners Club, 3 digits
     } else {
         return Math.floor(100 + Math.random() * 900).toString().substring(0, 3); // Other cards, 3 digits
     }
@@ -108,9 +117,20 @@ function displayCardNumbers(numbers) {
 function copyToClipboard() {
     const text = document.getElementById('cardNumbers').innerText;
     navigator.clipboard.writeText(text).then(() => {
-        alert('Card numbers copied to clipboard!');
+        showCopySuccess();
     }).catch(err => {
         console.error('Error in copying text: ', err);
         alert('Failed to copy card numbers to clipboard.');
     });
+}
+
+function showCopySuccess() {
+    const copyIcon = document.querySelector('.copy-btn');
+    copyIcon.classList.remove('fa-copy');
+    copyIcon.classList.add('fa-check', 'text-success');
+
+    setTimeout(() => {
+        copyIcon.classList.remove('fa-check', 'text-success');
+        copyIcon.classList.add('fa-copy');
+    }, 2000); // Revert back after 2 seconds
 }

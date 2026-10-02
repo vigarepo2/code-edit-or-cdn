@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="792" height="604" viewBox="118 182 792 604" fill="none" role="img" aria-labelledby="wikio-watermark-white-title wikio-watermark-white-desc">
+<title id="wikio-watermark-white-title">Wikio — white watermark</title>
+<desc id="wikio-watermark-white-desc">Single-colour Wikio W silhouette. Transparent background. Use at full opacity for small marks; adjust overall opacity to suit a watermark surface.</desc>
+<defs></defs>
+<g id="wikio-watermark-white-silhouette" fill="#FFFFFF"><path d="M160 291 Q152 268 175 260 L247 237 Q270 230 278 253 L363 552 Q368 565 373 551 L443 338 C455 305 482 284 512 284 C542 284 569 305 581 338 L651 551 Q656 565 661 552 L748 235 Q756 212 779 219 L854 242 Q877 249 869 272 L732 719 Q723 746 694 746 H652 Q622 746 611 718 L519 469 Q512 450 505 469 L413 718 Q402 746 372 746 H330 Q301 746 292 719 Z"/></g>
+</svg>

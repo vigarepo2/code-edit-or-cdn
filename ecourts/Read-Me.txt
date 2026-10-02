@@ -1,0 +1,36 @@
+WIKIO — SVG IDENTITY SET
+
+Design: a custom continuous W with folded coral faces, soft inner joins,
+slanted terminals and a slightly raised right tip. The contour is identical
+throughout the set. The finish takes its warm palette and restrained light
+from the supplied eCourts artwork; the monogram geometry was drawn anew.
+
+CHOOSE A FILE
+wikio-mark-dark.svg        Transparent satin mark for dark surfaces.
+wikio-mark-light.svg       Transparent satin mark for light surfaces.
+wikio-mark-universal.svg   Fixed mid-coral palette for either light or dark.
+wikio-watermark-white.svg  One-colour white mark for dark/image surfaces.
+wikio-watermark-ink.svg    One-colour ink mark for light surfaces/printing.
+wikio-logo-dark/light     Symbol + Wikio wordmark; filename means the surface.
+wikioapps-logo-dark/light Symbol + WikioApps organization wordmark.
+wikio-app-icon-dark/light Full-bleed 1024 square; device applies its mask.
+Wikio-Preview.svg/png     Presentation of the identity, not a watermark file.
+
+USE
+Keep the original proportions. Use monochrome below 32px wide; 24px or larger
+is preferred, while 16px is a constrained favicon use. Leave free space around
+the symbol of at least one main-stroke width. Avoid shadows or animation on
+small permanent watermarks. If a low-opacity watermark is wanted, adjust the
+opacity of the complete mark rather than the individual faces.
+
+Select the light/dark file according to the actual surface behind the mark.
+There is no hidden colour auto-detection, JavaScript, bitmap or external URL.
+All text in delivered SVGs is outlined. Letter outlines derive from Nimbus
+Sans Bold; the icon is hand-drawn vector geometry. No font files are required.
+Every decorative face is clipped to the same primary silhouette. Native
+layers have named IDs so a vector editor can change colours and surface finish.
+
+When inserting the same SVG source multiple times INLINE in one HTML document,
+prefix its IDs per instance; ordinary separate image-file use needs no change.
+Android VectorDrawable does not support every SVG feature directly: use an SVG
+renderer, convert through your asset pipeline, or rasterize the app tile.
